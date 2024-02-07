@@ -203,20 +203,49 @@ class startGame:
                         current_player_hand.append(drawn_card)
                         print(f"{current_player} has picked up {drawn_card}")
 ###PIick up 2###
-            # elif "pick_up_2" in str(played_card):
-            #     self.current_player_index = (self.current_player_index +1) % len(self.players)
-            #     #print(f"the current player is {current_player}")
-            #     #next_player_hand = self.players[self.current_player_index].hand
-            #     #if any("pick_up_2" in str(card) for card in next_player_hand):
-            #     #   print("they have a pick_up_2")
-            #     #else:
-            #     # #next_player_hand = self.players[self.current_player_index].hand
-            #     for _ in range(2):
-            #             drawn_card=initial_pack.draw_card()
-            #             current_player_hand.append(drawn_card)
-            #             print(f"player {self.current_player_index+1} has picked up {drawn_card}")
-                # else:
+            elif "pick_up_2" in str(played_card):
+                print(f"Top card on the discard pile: {self.discard_pile[-1]}")
+                discarded_card_in_play=self.discard_pile[-1]
+                #print(discarded_card_in_play)
+    #remove card from the players hand##
+                current_player_hand.pop(chosen_card)
+                
+                # move to the next player
+                
+                self.current_player_index = (self.current_player_index +1) % len(self.players)
+                current_player =(self.players[self.current_player_index])
+                current_player_hand=(self.players[self.current_player_index].hand)
+                pick_up_2_indices = [i for i, card in enumerate(current_player_hand) if "pick_up_2" in str(card)]
+                #if any("pick_up_2" in str(card) for card in current_player_hand):
+                if pick_up_2_indices:
+                    print(f"{current_player}You have the following Pick Up 2 cards in your hand:")
+                    for index in pick_up_2_indices:
+                        print(f"{index}: {current_player_hand[index]}")
+##keep checking for a pick up 2 index number
+                        
+                    chosen_index = None
+                    while chosen_index is None or chosen_index not in pick_up_2_indices:
+                        chosen_index = int(input("Enter the index of the Pick Up 2 card you want to play: "))
+                    if chosen_index not in pick_up_2_indices:
+                        print("Invalid index. Please choose a valid index.")
+                    
+                    # Ensure the chosen index is valid
+                    if chosen_index in pick_up_2_indices:
+                        print(f"bob")
+                        print(f"Top card on the discard pile: {self.discard_pile[-1]}")
+                        discarded_card_in_play=self.discard_pile[-1]
+                        current_player_hand.pop(chosen_card)
+                        # Implement logic to handle the next player playing the chosen "Pick Up 2" card
+                    else:
+                        print("Invalid index. Please choose a valid index.")   
+                        print(f"{current_player} has a pick_up_2")
 
+                else:
+                    for _ in range(2):
+                        drawn_card=initial_pack.draw_card()
+                        current_player_hand.append(drawn_card)
+                        print(f"{current_player} has picked up {drawn_card}")
+            
             else:
                     print(f"Top card on the discard pile: {self.discard_pile[-1]}")
                     discarded_card_in_play=self.discard_pile[-1]
