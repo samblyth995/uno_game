@@ -1,5 +1,5 @@
 import random
-random.seed(30)
+random.seed(100)
 class Card:
 #######__init__ means instatiating the object as it's created
 
@@ -155,6 +155,7 @@ class startGame:
         #print(current_player_hand[choosen_card])
         played_card=current_player_hand[chosen_card]
         discarded_card_in_play= self.discard_pile[-1]
+     
 ##check for colour or number match
         if (str(played_card) == "wild" or "pick_up_4" or
             (hasattr(played_card, 'colour') and played_card.colour == discarded_card_in_play.colour) or 
@@ -181,14 +182,41 @@ class startGame:
                 break
             ##pick up 4
             elif str(played_card) =="pick_up_4":
+## add chosen card to the discard list
+                
+                print(f"Top card on the discard pile: {self.discard_pile[-1]}")
+                discarded_card_in_play=self.discard_pile[-1]
+                #print(discarded_card_in_play)
+    #remove card from the players hand##
+                current_player_hand.pop(chosen_card)
+                print(f"the current player is {current_player}")
+                
+                print(self.current_player_index)
                 
                 self.current_player_index = (self.current_player_index +1) % len(self.players)
-                print(f"the current player is {self.current_player_index}")
+                current_player =(self.players[self.current_player_index])
+                current_player_hand=(self.players[self.current_player_index].hand)
+                print(f"the current player index is now Player{current_player}")
                 #next_player_hand = self.players[self.current_player_index].hand
                 for _ in range(4):
                         drawn_card=initial_pack.draw_card()
                         current_player_hand.append(drawn_card)
-                        print(f"player {self.current_player_index+1} has picked up {drawn_card}")
+                        print(f"{current_player} has picked up {drawn_card}")
+###PIick up 2###
+            # elif "pick_up_2" in str(played_card):
+            #     self.current_player_index = (self.current_player_index +1) % len(self.players)
+            #     #print(f"the current player is {current_player}")
+            #     #next_player_hand = self.players[self.current_player_index].hand
+            #     #if any("pick_up_2" in str(card) for card in next_player_hand):
+            #     #   print("they have a pick_up_2")
+            #     #else:
+            #     # #next_player_hand = self.players[self.current_player_index].hand
+            #     for _ in range(2):
+            #             drawn_card=initial_pack.draw_card()
+            #             current_player_hand.append(drawn_card)
+            #             print(f"player {self.current_player_index+1} has picked up {drawn_card}")
+                # else:
+
             else:
                     print(f"Top card on the discard pile: {self.discard_pile[-1]}")
                     discarded_card_in_play=self.discard_pile[-1]
@@ -212,7 +240,7 @@ class startGame:
         
         #current_player = self.players[next_player]
         
-        print(self.current_player_index)
+        #print(self.current_player_index)
         self.play_card(self.players)
             
             #current_player_hand=(game1.players[0].hand)
