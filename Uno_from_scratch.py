@@ -163,8 +163,22 @@ class startGame:
                 current_player.hand.remove(played_card)  # Remove the card from the player's hand
                 #self.current_player_index = (self.current_player_index + 1) % len(self.players)
                 print(f"top card on the discard pile is {played_card}")
+                
+                if str(played_card) =="wild":
+                    while True:
+                        #ask user to choose a colour
+                        wild_colour= input("Enter your chosen wild card colour? ").lower()
+                        if wild_colour in["red", "yellow","green","blue"]:
+                            played_card.colour=wild_colour
+                            self.discard_pile.append(played_card)
+                            print(f"top card on the discard pile is {played_card}")
+
+                            break
+                        else:
+                            print(f"invalid colour chosen, choose again")
+                            break
                 break  # Exit the loop as the player successfully played a card
-            
+                
             else:
                 print("Can't play that card.")
                 drawn_card = initial_pack.draw_card()
