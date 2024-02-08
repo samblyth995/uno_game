@@ -111,7 +111,8 @@ class startGame:
         self.discard_pile = []
         self.players = [] #keep a list of players
         self.current_player_index = 0
-        self.counter=0    
+        self.counter=0
+        self.reverse=False # true is anticlockwise   
         
     def deal(self):
         num_players = int(input("Enter the number of players: "))
@@ -165,6 +166,7 @@ class startGame:
                 #self.current_player_index = (self.current_player_index + 1) % len(self.players)
                 print(f"top card on the discard pile is {played_card}")
                 
+                
                 if str(played_card) =="wild":
                     while True:
                         #ask user to choose a colour
@@ -199,7 +201,11 @@ class startGame:
                    self.current_player_index = (self.current_player_index + 1) % len(self.players)
                    print(f" Player {self.current_player_index+1} You miss a turn")
 
+                elif "reverse" in str(played_card):
+                    self.reverse= not self.reverse # using not keyword as a flip
+                    
                 break  # Exit the loop as the player successfully played a card
+                
                 
             else:
                 print("Can't play that card.")
@@ -207,11 +213,15 @@ class startGame:
                 current_player.hand.append(drawn_card)
                 print(f"{current_player} has picked up {drawn_card}")
                 break
-
+        self.next_player(self.current_player_index)
 ##Move to the next player##
-    
-        self.current_player_index = (self.current_player_index + 1) % len(self.players)
-        self.play_card(self.players)
+    def next_player(self, current_player_index):
+        if self.reverse==False:
+            self.current_player_index = (self.current_player_index + 1) % len(self.players)
+            self.play_card(self.players)
+        else:
+            self.current_player_index = (self.current_player_index - 1) % len(self.players)
+            self.play_card(self.players)
         
 
 ################## call things ###################
@@ -222,4 +232,4 @@ for shuffledcards in initial_pack.pack:  ##show shuffled pack###
 game1=startGame()
 game1.deal()
 game1.discard()
-game1.play_card(game1.players) 
+game1.play_card(game1.players)
