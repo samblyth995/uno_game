@@ -176,7 +176,20 @@ class startGame:
                             break
                         else:
                             print(f"invalid colour chosen, choose again")
+                            
+                
+                if str(played_card) =="pick_up_4":
+                    while True:
+                    #ask user to choose a colour
+                        four_colour= input("Enter your chosen pick_up_4 card colour? ").lower()
+                        if four_colour in["red", "yellow","green","blue"]:
+                            played_card.colour=four_colour
+                            print(f"top card on the discard pile is {played_card}")
+                            
                             break
+                        else:
+                            print(f"invalid colour chosen, choose again")
+
                 break  # Exit the loop as the player successfully played a card
                 
             else:
