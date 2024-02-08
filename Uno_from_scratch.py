@@ -162,6 +162,7 @@ class startGame:
                 self.discard_pile.append(played_card)
                 current_player.hand.remove(played_card)  # Remove the card from the player's hand
                 #self.current_player_index = (self.current_player_index + 1) % len(self.players)
+                print(f"top card on the discard pile is {played_card}")
                 break  # Exit the loop as the player successfully played a card
             
             else:
@@ -169,7 +170,7 @@ class startGame:
                 drawn_card = initial_pack.draw_card()
                 current_player.hand.append(drawn_card)
                 print(f"{current_player} has picked up {drawn_card}")
-
+                break
 
 ##Move to the next player##
         self.current_player_index = (self.current_player_index + 1) % len(self.players)
