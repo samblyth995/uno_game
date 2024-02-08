@@ -110,7 +110,8 @@ class startGame:
     def __init__(self):
         self.discard_pile = []
         self.players = [] #keep a list of players
-        self.current_player_index = 0     
+        self.current_player_index = 0
+        self.counter=0    
         
     def deal(self):
         num_players = int(input("Enter the number of players: "))
@@ -178,7 +179,7 @@ class startGame:
                             print(f"invalid colour chosen, choose again")
                             
                 
-                if str(played_card) =="pick_up_4":
+                elif str(played_card) =="pick_up_4":
                     while True:
                     #ask user to choose a colour
                         four_colour= input("Enter your chosen pick_up_4 card colour? ").lower()
@@ -189,6 +190,14 @@ class startGame:
                             break
                         else:
                             print(f"invalid colour chosen, choose again")
+                
+                elif "pick_up_2" in str(played_card):
+                    self.counter +=1
+                    print(self.counter)
+                    
+                elif "miss_a_turn" in str(played_card):
+                   self.current_player_index = (self.current_player_index + 1) % len(self.players)
+                   print(f" Player {self.current_player_index+1} You miss a turn")
 
                 break  # Exit the loop as the player successfully played a card
                 
@@ -200,6 +209,7 @@ class startGame:
                 break
 
 ##Move to the next player##
+    
         self.current_player_index = (self.current_player_index + 1) % len(self.players)
         self.play_card(self.players)
         
