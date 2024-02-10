@@ -157,7 +157,8 @@ class startGame:
             chosen_card_index = int(input("Enter the index of the card you want to play: "))
             played_card = current_player_hand[chosen_card_index]
             discarded_card_in_play = self.discard_pile[-1]
-            
+
+        
             if (str(played_card) == "wild" or str(played_card) == "pick_up_4" or
                     (hasattr(played_card, 'colour') and played_card.colour == discarded_card_in_play.colour) or
                     (hasattr(played_card, 'number') and played_card.number == discarded_card_in_play.number)):
@@ -194,9 +195,11 @@ class startGame:
                             print(f"invalid colour chosen, choose again")
                 
                 elif "pick_up_2" in str(played_card):
-                    self.counter +=1
+                    self.counter +=2
                     print(self.counter)
-                    
+                    # go to next player
+                    #game1.pick_up(current_player)
+
                 elif "miss_a_turn" in str(played_card):
                    self.current_player_index = (self.current_player_index + 1) % len(self.players)
                    print(f" Player {self.current_player_index+1} You miss a turn")
@@ -209,9 +212,11 @@ class startGame:
                 
             else:
                 print("Can't play that card.")
-                drawn_card = initial_pack.draw_card()
-                current_player.hand.append(drawn_card)
-                print(f"{current_player} has picked up {drawn_card}")
+                game1.pick_up(current_player)
+
+                # drawn_card = initial_pack.draw_card()
+                # current_player.hand.append(drawn_card)
+                # print(f"{current_player} has picked up {drawn_card}")
                 break
         self.next_player(self.current_player_index)
 ##Move to the next player##
@@ -222,7 +227,22 @@ class startGame:
         else:
             self.current_player_index = (self.current_player_index - 1) % len(self.players)
             self.play_card(self.players)
-        
+##Pick up Cards
+    def pick_up(self,current_player):
+        if self.counter>=1:
+            for i in range(self.counter):
+                drawn_card = initial_pack.draw_card()
+                current_player.hand.append(drawn_card)
+                print(f"{current_player} has picked up {drawn_card}") 
+                
+        else:
+            drawn_card = initial_pack.draw_card()
+            current_player.hand.append(drawn_card)
+            print(f"{current_player} has picked up {drawn_card}")
+
+
+                
+                
 
 ################## call things ###################
 #startGame()
