@@ -154,7 +154,13 @@ class startGame:
             current_player = self.players[self.current_player_index]
             current_player_hand = current_player.hand
             print(f"{current_player}, it is your turn, which card would you like to play from your hand: {', '.join(map(str, current_player_hand))}")
-            chosen_card_index = int(input("Enter the index of the card you want to play: "))
+            chosen_card_index = input("Enter the index of the card you want to play or enter 'P' to pick up: ")
+        #convert str to int
+            
+            if chosen_card_index.upper() == 'P':
+                self.pick_up(current_player)
+                break
+            chosen_card_index=int(chosen_card_index)
             played_card = current_player_hand[chosen_card_index]
             discarded_card_in_play = self.discard_pile[-1]
 
@@ -197,6 +203,7 @@ class startGame:
                 elif "pick_up_2" in str(played_card):
                     self.counter +=2
                     print(self.counter)
+                    break
                     # go to next player
                     #game1.pick_up(current_player)
 
@@ -217,7 +224,7 @@ class startGame:
                 # drawn_card = initial_pack.draw_card()
                 # current_player.hand.append(drawn_card)
                 # print(f"{current_player} has picked up {drawn_card}")
-                break
+                #break
         self.next_player(self.current_player_index)
 ##Move to the next player##
     def next_player(self, current_player_index):
@@ -240,7 +247,7 @@ class startGame:
             current_player.hand.append(drawn_card)
             print(f"{current_player} has picked up {drawn_card}")
 
-
+print("loop ended pick_up_2 was played")
                 
                 
 
