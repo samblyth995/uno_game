@@ -153,13 +153,18 @@ class startGame:
         while True:
             current_player = self.players[self.current_player_index]
             current_player_hand = current_player.hand
+
             print(f"{current_player}, it is your turn, which card would you like to play from your hand: {', '.join(map(str, current_player_hand))}")
-            chosen_card_index = input("Enter the index of the card you want to play or enter 'P' to pick up: ")
-        #convert str to int
             
+            
+            chosen_card_index = input("Enter the index of the card you want to play or enter 'P' to pick up: ")
+            #drop to pick up card
             if chosen_card_index.upper() == 'P':
                 self.pick_up(current_player)
                 break
+
+            
+            #convert str to int
             chosen_card_index=int(chosen_card_index)
             played_card = current_player_hand[chosen_card_index]
             discarded_card_in_play = self.discard_pile[-1]
@@ -224,16 +229,20 @@ class startGame:
                 # drawn_card = initial_pack.draw_card()
                 # current_player.hand.append(drawn_card)
                 # print(f"{current_player} has picked up {drawn_card}")
-                #break
+                break
         self.next_player(self.current_player_index)
+        if self.counter>=1:
+            self.pick_up_2(played_card,current_player)
+        else:
+            self.play_card(self.players)
 ##Move to the next player##
     def next_player(self, current_player_index):
         if self.reverse==False:
             self.current_player_index = (self.current_player_index + 1) % len(self.players)
-            self.play_card(self.players)
+            #self.play_card(self.players)
         else:
             self.current_player_index = (self.current_player_index - 1) % len(self.players)
-            self.play_card(self.players)
+            #self.play_card(self.players)
 ##Pick up Cards
     def pick_up(self,current_player):
         if self.counter>=1:
@@ -247,8 +256,13 @@ class startGame:
             current_player.hand.append(drawn_card)
             print(f"{current_player} has picked up {drawn_card}")
 
-print("loop ended pick_up_2 was played")
-                
+##concurent pick up 2
+    def pick_up_2(self,played_card, current_player):
+        print(" last play was pick_up_2")
+    ### code for concurrent pick up 2 goes in here
+        ##call to 
+        #self.play_card(self.players) to re-enter the loop
+       
                 
 
 ################## call things ###################
