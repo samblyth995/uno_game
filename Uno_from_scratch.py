@@ -207,12 +207,14 @@ class startGame:
                 
                 elif "pick_up_2" in str(played_card):
                     self.counter +=2
-                    print(self.counter)
+                    print(f" counter = {self.counter}")
+                    self.pick_up_2(self.current_player_index,self.reverse,self.players, self.discard_pile,self.counter)
                     break
                     # go to next player
                     #game1.pick_up(current_player)
 
                 elif "miss_a_turn" in str(played_card):
+                   ##need to call Next player function to check for reverse
                    self.current_player_index = (self.current_player_index + 1) % len(self.players)
                    print(f" Player {self.current_player_index+1} You miss a turn")
 
@@ -230,13 +232,14 @@ class startGame:
                 # current_player.hand.append(drawn_card)
                 # print(f"{current_player} has picked up {drawn_card}")
                 break
-        self.next_player(self.current_player_index)
-        if self.counter>=1:
-            self.pick_up_2(played_card,current_player)
-        else:
-            self.play_card(self.players)
+        self.next_player(self.current_player_index,self.reverse)
+##skip to pick up 2
+       # if self.counter>=1:
+           # self.pick_up_2(self.current_player_index,self.reverse,self.players, self.discard_pile,self.counter)
+        #else:
+        self.play_card(self.players)
 ##Move to the next player##
-    def next_player(self, current_player_index):
+    def next_player(self, current_player_index,reverse):
         if self.reverse==False:
             self.current_player_index = (self.current_player_index + 1) % len(self.players)
             #self.play_card(self.players)
@@ -257,9 +260,65 @@ class startGame:
             print(f"{current_player} has picked up {drawn_card}")
 
 ##concurent pick up 2
-    def pick_up_2(self,played_card, current_player):
-        print(" last play was pick_up_2")
-    ### code for concurrent pick up 2 goes in here
+    def pick_up_2(self,current_player_index,reverse,players, discard_pile,counter):
+        #self.current_player_index+1
+        print(f"the current player is {self.current_player_index+1}")
+        #print(f"direction is {self.reverse}")
+        ###move to the next player
+        if self.reverse==False:
+            self.current_player_index = (self.current_player_index + 1) % len(self.players)
+        else:
+            self.current_player_index = (self.current_player_index - 1) % len(self.players)
+
+        while True:  
+            current_player = self.players[self.current_player_index]
+            current_player_hand = current_player.hand
+
+            print(f"{current_player}, it is your turn, you can only play a pick_up_2 or P: {', '.join(map(str, current_player_hand))}")
+                
+                
+            chosen_card_index = input("Enter the index of the card you want to play or enter 'P' to pick up: ")
+            #drop to pick up card
+            if chosen_card_index.upper() == 'P':
+                self.pick_up(current_player)
+                print("pick up a card")
+                break
+            
+            #convert str to int
+            chosen_card_index=int(chosen_card_index)
+            played_card = current_player_hand[chosen_card_index]
+            #self.discarded_card_in_play = self.discard_pile[-1]
+
+
+            if "pick_up_2" in str(played_card):
+                self.counter+=2
+                print(self.counter)
+                self.discard_pile.append(played_card)
+                current_player.hand.remove(played_card)  # Remove the card from the player's hand
+                #self.current_player_index = (self.current_player_index + 1) % len(self.players)
+                print(f"top card on the discard pile is {played_card}")
+                self.pick_up_2(current_player_index,reverse,players, discard_pile,counter)
+                break #player has played a valid card
+            else:
+                print("invalid card choose again")
+                self.pick_up_2(current_player_index,reverse,players, discard_pile,counter)
+                break
+
+
+    #self.play_card(self.players)    
+
+        
+        
+        
+        ##move to next player
+        ##while true
+        ##play card, can only be pick up 2
+        ##copy from above but change allowed cards
+        ## Add to Counter
+        ##if P call Pick_up cards - should then go back in to the main loop ?
+    
+        
+        ##check played 
         ##call to 
         #self.play_card(self.players) to re-enter the loop
        
