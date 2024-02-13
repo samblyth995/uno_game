@@ -208,7 +208,16 @@ class startGame:
                         if four_colour in["red", "yellow","green","blue"]:
                             played_card.colour=four_colour
                             print(f"top card on the discard pile is {played_card}")
-                            self.pick_up(current_player)
+                            self.counter = 4
+                            if self.reverse==False:
+                                self.current_player_index = (self.current_player_index + 1) % len(self.players)
+                                current_player = self.players[self.current_player_index]
+                                current_player_hand = current_player.hand
+                            else:
+                                self.current_player_index = (self.current_player_index - 1) % len(self.players)
+                                current_player = self.players[self.current_player_index]
+                                current_player_hand = current_player.hand
+                            self.pick_up(self.current_player_index)
                             
                             break
                         else:
@@ -264,13 +273,16 @@ class startGame:
     def next_player(self, current_player_index,reverse):
         if self.reverse==False:
             self.current_player_index = (self.current_player_index + 1) % len(self.players)
-            #self.play_card(self.players)
+            
         else:
             self.current_player_index = (self.current_player_index - 1) % len(self.players)
             #self.play_card(self.players)
 ##Pick up Cards
-    def pick_up(self,current_player):
+    def pick_up(self, current_player):
+        
         print(f"{self.counter=}")
+        
+      
         if self.counter>=1:
             for i in range(self.counter):
                 drawn_card = initial_pack.draw_card()
@@ -301,7 +313,6 @@ class startGame:
             #drop to pick up card
             if chosen_card_index.upper() == 'P':
                 self.pick_up(current_player)
-                print("pick up a card")
                 break
             
             #convert str to int
@@ -309,7 +320,8 @@ class startGame:
             #check int is in range
             if chosen_card_index not in range(len(current_player_hand)):
                     print("you have not chosen a valid card index.")
-                    game1.pick_up_2(self.current_player_index,self.reverse,self.players, self.discard_pile,self.counter)
+                    game1.pick_up_2(self.current_player_index,self.reverse,
+                                    self.players, self.discard_pile,self.counter)
                     break
             played_card = current_player_hand[chosen_card_index]
             #self.discarded_card_in_play = self.discard_pile[-1]
