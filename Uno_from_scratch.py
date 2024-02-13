@@ -166,10 +166,18 @@ class startGame:
             
             #convert str to int
             chosen_card_index=int(chosen_card_index)
+            #check index is in range
+            
+            if chosen_card_index not in range(len(current_player_hand)):
+                    print("you have not chosen a valid card index.")
+                    game1.play_card(current_player)
+                    break
+
             played_card = current_player_hand[chosen_card_index]
             discarded_card_in_play = self.discard_pile[-1]
+            
 
-        
+
             if (str(played_card) == "wild" or str(played_card) == "pick_up_4" or
                     (hasattr(played_card, 'colour') and played_card.colour == discarded_card_in_play.colour) or
                     (hasattr(played_card, 'number') and played_card.number == discarded_card_in_play.number)):
@@ -200,6 +208,7 @@ class startGame:
                         if four_colour in["red", "yellow","green","blue"]:
                             played_card.colour=four_colour
                             print(f"top card on the discard pile is {played_card}")
+                            self.pick_up(current_player)
                             
                             break
                         else:
@@ -215,18 +224,20 @@ class startGame:
 
                 elif "miss_a_turn" in str(played_card):
                    ##need to call Next player function to check for reverse
-                   self.current_player_index = (self.current_player_index + 1) % len(self.players)
+                   #self.current_player_index = (self.current_player_index + 1) % len(self.players)
                    print(f" Player {self.current_player_index+1} You miss a turn")
+                   self.next_player(self.current_player_index,self.reverse)
 
                 elif "reverse" in str(played_card):
                     self.reverse= not self.reverse # using not keyword as a flip
-                    
+                
+              
                 break  # Exit the loop as the player successfully played a card
                 
-                
+               
             else:
-                print("Can't play that card.")
-                game1.pick_up(current_player)
+                print("Can't play that card,if you dont have a card to play press P to pick up")
+                game1.play_card(current_player)
 
                 # drawn_card = initial_pack.draw_card()
                 # current_player.hand.append(drawn_card)
@@ -252,7 +263,9 @@ class startGame:
             for i in range(self.counter):
                 drawn_card = initial_pack.draw_card()
                 current_player.hand.append(drawn_card)
-                print(f"{current_player} has picked up {drawn_card}") 
+                print(f"{current_player} has picked up {drawn_card}")
+                break
+            self.counter==0
                 
         else:
             drawn_card = initial_pack.draw_card()
