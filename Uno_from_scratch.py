@@ -15,6 +15,7 @@ class WildCard:
     def __init__(self, colour,action):
         self.colour = colour
         self.action = action
+        self.number = None
 
     def __str__(self):
         return f"{self.colour}_{self.action}"
@@ -217,7 +218,7 @@ class startGame:
                                 self.current_player_index = (self.current_player_index - 1) % len(self.players)
                                 current_player = self.players[self.current_player_index]
                                 current_player_hand = current_player.hand
-                            self.pick_up(self.current_player_index)
+                            self.pick_up(current_player)
                             
                             break
                         else:
@@ -278,7 +279,7 @@ class startGame:
             self.current_player_index = (self.current_player_index - 1) % len(self.players)
             #self.play_card(self.players)
 ##Pick up Cards
-    def pick_up(self, current_player):
+    def pick_up(self,current_player):
         
         print(f"{self.counter=}")
         
