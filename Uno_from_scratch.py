@@ -216,18 +216,29 @@ class startGame:
                 
                 elif "pick_up_2" in str(played_card):
                     self.counter +=2
-                    print(f" counter = {self.counter}")
+                    #print(f" counter = {self.counter}")
+                    print(f"{self.counter=}")
+                    ###move to the next player
+                    if self.reverse==False:
+                        self.current_player_index = (self.current_player_index + 1) % len(self.players)
+                    else:
+                        self.current_player_index = (self.current_player_index - 1) % len(self.players)
+
                     self.pick_up_2(self.current_player_index,self.reverse,self.players, self.discard_pile,self.counter)
                     break
                     # go to next player
                     #game1.pick_up(current_player)
 
                 elif "miss_a_turn" in str(played_card):
-                   ##need to call Next player function to check for reverse
-                   #self.current_player_index = (self.current_player_index + 1) % len(self.players)
-                   print(f" Player {self.current_player_index+1} You miss a turn")
-                   self.next_player(self.current_player_index,self.reverse)
-
+                   if self.reverse==False:
+                    self.current_player_index = (self.current_player_index + 1) % len(self.players)
+                    print(f" Player {self.current_player_index+1} You miss a turn")
+                   else:
+                    self.current_player_index = (self.current_player_index - 1) % len(self.players)
+                    print(f" Player {self.current_player_index+1} You miss a turn")
+                    #self.next_player(self.current_player_index,self.reverse)
+                    break
+                   
                 elif "reverse" in str(played_card):
                     self.reverse= not self.reverse # using not keyword as a flip
                 
@@ -259,13 +270,14 @@ class startGame:
             #self.play_card(self.players)
 ##Pick up Cards
     def pick_up(self,current_player):
+        print(f"{self.counter=}")
         if self.counter>=1:
             for i in range(self.counter):
                 drawn_card = initial_pack.draw_card()
                 current_player.hand.append(drawn_card)
                 print(f"{current_player} has picked up {drawn_card}")
-                break
-            self.counter==0
+                #break
+            self.counter=0
                 
         else:
             drawn_card = initial_pack.draw_card()
@@ -277,12 +289,7 @@ class startGame:
         #self.current_player_index+1
         print(f"the current player is {self.current_player_index+1}")
         #print(f"direction is {self.reverse}")
-        ###move to the next player
-        if self.reverse==False:
-            self.current_player_index = (self.current_player_index + 1) % len(self.players)
-        else:
-            self.current_player_index = (self.current_player_index - 1) % len(self.players)
-
+        
         while True:  
             current_player = self.players[self.current_player_index]
             current_player_hand = current_player.hand
@@ -299,6 +306,11 @@ class startGame:
             
             #convert str to int
             chosen_card_index=int(chosen_card_index)
+            #check int is in range
+            if chosen_card_index not in range(len(current_player_hand)):
+                    print("you have not chosen a valid card index.")
+                    game1.pick_up_2(self.current_player_index,self.reverse,self.players, self.discard_pile,self.counter)
+                    break
             played_card = current_player_hand[chosen_card_index]
             #self.discarded_card_in_play = self.discard_pile[-1]
 
@@ -310,11 +322,15 @@ class startGame:
                 current_player.hand.remove(played_card)  # Remove the card from the player's hand
                 #self.current_player_index = (self.current_player_index + 1) % len(self.players)
                 print(f"top card on the discard pile is {played_card}")
-                self.pick_up_2(current_player_index,reverse,players, discard_pile,counter)
+                if self.reverse==False:
+                        self.current_player_index = (self.current_player_index + 1) % len(self.players)
+                else:
+                        self.current_player_index = (self.current_player_index - 1) % len(self.players)
+                self.pick_up_2(current_player_index,reverse,players, discard_pile,self.counter)
                 break #player has played a valid card
             else:
                 print("invalid card choose again")
-                self.pick_up_2(current_player_index,reverse,players, discard_pile,counter)
+                self.pick_up_2(current_player_index,reverse,players, discard_pile,self.counter)
                 break
 
 
