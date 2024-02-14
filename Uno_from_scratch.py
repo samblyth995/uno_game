@@ -253,10 +253,10 @@ class startGame:
                 elif "reverse" in str(played_card):
                     self.reverse= not self.reverse # using not keyword as a flip
                 
-                #Decalre a winner
-                # if not current_player.hand:
-                #             print(f"Player {current_player} has won the game by playing their last card!")
-                #             #return "Game Over"
+                #Declare a winner
+                if not current_player.hand:
+                            print(f"Player {current_player} has won the game by playing their last card!")
+                            return "Game Over"
                 
                 break  # Exit the loop as the player successfully played a card
                 
@@ -353,21 +353,7 @@ class startGame:
 
 
     #self.play_card(self.players)    
-
-        
-        
-        
-        ##move to next player
-        ##while true
-        ##play card, can only be pick up 2
-        ##copy from above but change allowed cards
-        ## Add to Counter
-        ##if P call Pick_up cards - should then go back in to the main loop ?
-    
-        
-        ##check played 
-        ##call to 
-        #self.play_card(self.players) to re-enter the loop
+print("Game Over")
        
                 
 
