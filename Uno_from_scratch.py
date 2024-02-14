@@ -57,7 +57,7 @@ class Deck:
         
             new_card = Card(colour, 0) 
             self.pack.append(new_card)
-            print(f"Deck has {len(self.pack)} cards after adding normal cards.")
+            #print(f"Deck has {len(self.pack)} cards after adding normal cards.")
               #print(self.pack)
          
 ########### ADD WILD CARDS ###############################
@@ -67,13 +67,13 @@ class Deck:
                 for i in range(2):
                     wild_card= WildCard(colour, wild_card_type)
                     self.pack.append(wild_card)
-                    print(f"Deck has {len(self.pack)} cards after adding action cards: {wild_card}")   
+                    #print(f"Deck has {len(self.pack)} cards after adding action cards: {wild_card}")   
 
         for special_wild_card in special_wild_cards:
             for i in range(4):
                 wild_card = SpecialWildCard(special_wild_card)
                 self.pack.append(wild_card)
-                print(f"Deck has {len(self.pack)} cards after adding special wild cards: {wild_card}")
+                #print(f"Deck has {len(self.pack)} cards after adding special wild cards: {wild_card}")
     ###########Shuffle########
     def shuffle(self):
         random.shuffle(self.pack)
@@ -142,8 +142,9 @@ class startGame:
             ###just checking it actually went there ####
             #print(f"this is the whole discard pile:{self.discard_pile}")
 
-            if type(top_card) == WildCard and top_card.action in ["wild", "pick_up_4"]:
+            if type(top_card) == WildCard or SpecialWildCard and top_card.action in ["wild", "pick_up_4", "pick_up_2","miss_a_turn", "reverse"]:
                     print(f"Unsuitable start card (wild card), flip again")
+                    
             else:
                     #print(f"Top card on the discard pile is: {top_card}")
                 break
