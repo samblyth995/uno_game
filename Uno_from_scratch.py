@@ -1,5 +1,5 @@
 import random
-random.seed(100)
+random.seed(0)
 class Card:
 #######__init__ means instatiating the object as it's created
 
@@ -299,8 +299,28 @@ class startGame:
                 
         else:
             drawn_card = initial_pack.draw_card()
-            current_player.hand.append(drawn_card)
-            print(f"{current_player} has picked up {drawn_card}")
+            
+            discarded_card_in_play = self.discard_pile[-1]
+            #print(f"{discarded_card_in_play.colour}")
+            #print(f"{discarded_card_in_play.number}")
+            if discarded_card_in_play.number == (drawn_card.number) or discarded_card_in_play.colour in str(drawn_card):
+                #print(f"{current_player}you have drawn a playable card, {drawn_card} do you want to play it now ?")
+
+                while True:
+                    response = input(f"{current_player} you have drawn a playable card, {drawn_card} do you want to play it now ? (yes/no): ").strip().lower()
+                    if response in ["yes", "no"]:
+                        break
+                    else:
+                        print("Please enter 'yes' or 'no'.") 
+                if response == "yes":
+                    self.discard_pile.append(drawn_card)
+                    print(f"{current_player} has played {drawn_card}")
+                    print (f"the top card on the discard pile is{self.discard_pile[-1]}")
+                
+
+                else:
+                    current_player.hand.append(drawn_card)
+                    print(f"{current_player} has picked up {drawn_card}")
 
 ##concurent pick up 2
     def pick_up_2(self,current_player_index,reverse,players, discard_pile,counter):
