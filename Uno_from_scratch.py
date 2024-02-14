@@ -142,9 +142,9 @@ class startGame:
             ###just checking it actually went there ####
             #print(f"this is the whole discard pile:{self.discard_pile}")
 
-            if type(top_card) == WildCard or SpecialWildCard and top_card.action in ["wild", "pick_up_4", "pick_up_2","miss_a_turn", "reverse"]:
+            if type(top_card) == WildCard and top_card.action in [ "pick_up_2","miss_a_turn", "reverse"] or type(top_card)== SpecialWildCard:
                     print(f"Unsuitable start card (wild card), flip again")
-                    
+
             else:
                     #print(f"Top card on the discard pile is: {top_card}")
                 break
@@ -253,7 +253,11 @@ class startGame:
                 elif "reverse" in str(played_card):
                     self.reverse= not self.reverse # using not keyword as a flip
                 
-              
+                #Decalre a winner
+                # if not current_player.hand:
+                #             print(f"Player {current_player} has won the game by playing their last card!")
+                #             #return "Game Over"
+                
                 break  # Exit the loop as the player successfully played a card
                 
                
