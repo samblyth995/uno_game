@@ -61,7 +61,7 @@ class QTrainer:
             done=(done, )# convert to tuple
 
     #want to get predicted Q values with current model
-    ## tutorial had = =
+    
         pred = self.model(state)    
     #apply formular: Q_new= reward+ gamma * the MAX(next predicted Q value). #only do this if not done
     #pred.clone()
