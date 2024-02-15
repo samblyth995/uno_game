@@ -1,6 +1,7 @@
-
+##states are in the game
 import random
 import numpy as np
+
 
 random.seed(8)
 class Card:
@@ -164,31 +165,38 @@ class startGame:
         while True:
             current_player = self.players[self.current_player_index]
             current_player_hand = current_player.hand
+            
 
             print(f"{current_player}, it is your turn, which card would you like to play from your hand: {', '.join(map(str, current_player_hand))}")
             
-            
-            chosen_card_index = input("Enter the index of the card you want to play or enter 'P' to pick up: ")
+            ###bot starts here##
+            ################
+            if "player1" in str(current_player):
+                chosen_card_index =self.computer_player(current_player, current_player_hand)
+            else:
+
+            #####Manual player starts####
+                chosen_card_index = input("Enter the index of the card you want to play or enter 'P' to pick up: ")
             #drop to pick up card
-            if chosen_card_index.upper() == 'P':
-                self.pick_up(current_player)
-                break
-
-            
-            #convert str to int
-            chosen_card_index=int(chosen_card_index)
-            #check index is in range
-            
-            if chosen_card_index not in range(len(current_player_hand)):
-                    print("you have not chosen a valid card index.")
-                    game1.play_card(current_player)
+                if chosen_card_index.upper() == 'P':
+                    self.pick_up(current_player)
                     break
-
+               
+            
+                #convert str to int
+                chosen_card_index=int(chosen_card_index)
+                #check index is in range
+                
+                if chosen_card_index not in range(len(current_player_hand)):
+                        print("you have not chosen a valid card index.")
+                        game1.play_card(current_player)
+                break
+            #####Manual player Ends here#### 
             played_card = current_player_hand[chosen_card_index]
             discarded_card_in_play = self.discard_pile[-1]
             
 
-    
+
             if (str(played_card) == "wild" or str(played_card) == "pick_up_4" or
                     (hasattr(played_card, 'colour') and played_card.colour == discarded_card_in_play.colour) or
                     (hasattr(played_card, 'number') and played_card.number == discarded_card_in_play.number)):
@@ -390,7 +398,32 @@ class startGame:
         elif "reverse" in str(played_card):
             self.reverse= not self.reverse # using not keyword as a flip
         
+
+    #####COMPUTER PLAYER#########
+    def computer_player(self, current_player, current_player_hand):
+          playable_cards =[]
+          discarded_card_in_play = self.discard_pile[-1]  
+          for index, card in enumerate(current_player_hand):
+            if (str(card) == "wild" or str(card) == "pick_up_4") or \
+                (card.colour == discarded_card_in_play.colour) or \
+                (card.number == discarded_card_in_play.number) or \
+                ("pick_up_2" in str(card) and "pick_up_2" in str(discarded_card_in_play)):
+                playable_cards.append(index)
+
+          print(f"playable cards are: {', '.join(map(str, playable_cards))}")  
+          chosen_card_index=random.randrange(len(playable_cards))
+          played_card = current_player_hand[chosen_card_index]
+          return chosen_card_index
+
+       
+              
                 
+
+
+
+    #####END BOT PLAY#####
+
+
     #self.play_card(self.players)    
 print("Game Over")
        
