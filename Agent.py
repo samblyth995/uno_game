@@ -3,6 +3,7 @@ import random
 import numpy as np
 from collections import deque
 from Uno_RL import Deck,Player,startGame
+from model import Linear_QNet, QTrainer
 
 MAX_MEMORY =100_000
 BATCH_SIZE =1000
@@ -13,10 +14,10 @@ class Agent:
     def __init__(self):
         self.n_games=0
         self.epsilon=0 # controls randomness
-        self.gamma =0  # discount rate
+        self.gamma =0.9  # discount rate - has to be smaller than 1
         self.memory =deque(maxlen=MAX_MEMORY) #call pop left for us
-        self.model= None # to do
-        self.trainer=None #to do
+        self.model= Linear_QNet(11,256,3)# input, hidden and output size
+        self.trainer=QTrainer(self.model, lr=LR, gamma=self.gamma)
 
 
     def get_state (self, startGame):
@@ -67,7 +68,7 @@ class Agent:
         #we want a move based on our model. It wats to predict based on 1 state (state0)
         #convert state to a tensor
             state0=torch.tensor(state, dtype=torch.float)
-            prediction =self.model.predict(state0)
+            prediction =self.model(state0)
         #convert from raw number to 1 hot encoded value
             move =torch.argmax(prediction).item()
             final_move[move]=1
@@ -79,7 +80,7 @@ def train():
     total_score =0
     record =0
     agent = Agent()
-    #game = SnakeGameAI()
+    game = startGame()
     while True:
         #get the old state
         state_old = agent.get_state(startGame)
@@ -104,7 +105,7 @@ def train():
 
             if score > record:
                 record = score
-                #agent.model.save()
+                agent.model.save()
 
             print('Game',agent.n_games, 'Score', score, 'Record',record)
             #plot to do
