@@ -173,24 +173,23 @@ class startGame:
             ################
             if "player1" in str(current_player):
                 chosen_card_index =self.computer_player(current_player, current_player_hand)
+                
             else:
-
             #####Manual player starts####
                 chosen_card_index = input("Enter the index of the card you want to play or enter 'P' to pick up: ")
-            #drop to pick up card
-                if chosen_card_index.upper() == 'P':
-                    self.pick_up(current_player)
-                    break
-               
+        #drop to pick up card
+            # if chosen_card_index.upper() == 'P':
+            #     self.pick_up(current_player)
+            #     break
             
-                #convert str to int
-                chosen_card_index=int(chosen_card_index)
-                #check index is in range
-                
-                if chosen_card_index not in range(len(current_player_hand)):
-                        print("you have not chosen a valid card index.")
-                        game1.play_card(current_player)
-                break
+            #convert str to int
+            chosen_card_index=int(chosen_card_index)
+            #check index is in range
+            
+            if chosen_card_index not in range(len(current_player_hand)):
+                    print("you have not chosen a valid card index.")
+                    game1.play_card(current_player)
+                    break
             #####Manual player Ends here#### 
             played_card = current_player_hand[chosen_card_index]
             discarded_card_in_play = self.discard_pile[-1]
@@ -411,17 +410,14 @@ class startGame:
                 playable_cards.append(index)
 
           print(f"playable cards are: {', '.join(map(str, playable_cards))}")  
-          chosen_card_index=random.randrange(len(playable_cards))
+          chosen_card_index=random.choice(playable_cards)
           played_card = current_player_hand[chosen_card_index]
           return chosen_card_index
 
        
               
                 
-
-
-
-    #####END BOT PLAY#####
+    #####END COMPUTER PLAYER#####
 
 
     #self.play_card(self.players)    
