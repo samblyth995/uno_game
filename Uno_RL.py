@@ -176,9 +176,10 @@ class startGame:
                 
             else:
             #####Manual player starts####
-               chosen_card_index = input("Enter the index of the card you want to play or enter 'P' to pick up: ")
+                chosen_card_index = input("Enter the index of the card you want to play or enter 'P' to pick up: ")
+                chosen_card_index=str(chosen_card_index)
         #drop to pick up card
-            if chosen_card_index.upper() == 'P':
+            if chosen_card_index == 'P':
                 self.pick_up(current_player)
                 break
             
@@ -233,10 +234,7 @@ class startGame:
             #self.play_card(self.players)
 ##Pick up Cards
     def pick_up(self,current_player):
-        
-        print(f"{self.counter=}")
-        
-      
+
         if self.counter>=1:
             for i in range(self.counter):
                 drawn_card = initial_pack.draw_card()
@@ -256,26 +254,31 @@ class startGame:
                 (drawn_card.number == discarded_card_in_play.number) or \
                 ("pick_up_2" in str(drawn_card) and "pick_up_2" in str(discarded_card_in_play)):
 
-            #if discarded_card_in_play.number == (drawn_card.number) or discarded_card_in_play.colour in str(drawn_card):
-               # print(f"bob")
-           # if discarded_card_in_play.number == (drawn_card.number) or discarded_card_in_play.colour in str(drawn_card):
-                #print(f"{current_player}you have drawn a playable card, {drawn_card} do you want to play it now ?")
-
-                while True:
-                    response = input(f"{current_player} you have drawn a playable card, {drawn_card} do you want to play it now ? (yes/no): ").strip().lower()
-                    if response in ["yes", "no"]:
-                        break
-                    else:
-                        print("Please enter 'yes' or 'no'.") 
-                if response == "yes":
+                
+                if"player1"in str(current_player):
+                    print(f"{current_player} you have picked up a playable card {drawn_card} and played it")
+                    chosen_card_index=len(current_player.hand)
                     self.discard_pile.append(drawn_card)
-                    print(f"{current_player} has played {drawn_card}")
                     print (f"the top card on the discard pile is {self.discard_pile[-1]}")
                     self.played_card=drawn_card
                     self.check_played_card(self.played_card, current_player,self.current_player_index)
+                        
                 else:
-                  current_player.hand.append(drawn_card)
-                  print(f"{current_player} has picked up {drawn_card}") 
+                    while True:
+                        response = input(f"{current_player} you have drawn a playable card, {drawn_card} do you want to play it now ? (yes/no): ").strip().lower()
+                        if response in ["yes", "no"]:
+                            break
+                        else:
+                            print("Please enter 'yes' or 'no'.") 
+                        if response == "yes":
+                            self.discard_pile.append(drawn_card)
+                            print(f"{current_player} has played {drawn_card}")
+                            print (f"the top card on the discard pile is {self.discard_pile[-1]}")
+                            self.played_card=drawn_card
+                            self.check_played_card(self.played_card, current_player,self.current_player_index)
+                        else:
+                            current_player.hand.append(drawn_card)
+                            print(f"{current_player} has picked up {drawn_card}") 
             else:
                 current_player.hand.append(drawn_card)
                 print(f"{current_player} has picked up {drawn_card}")
