@@ -3,7 +3,7 @@ import random
 import numpy as np
 
 
-random.seed(8)
+random.seed(3)
 class Card:
 #######__init__ means instatiating the object as it's created
 
@@ -169,18 +169,18 @@ class startGame:
 
             print(f"{current_player}, it is your turn, which card would you like to play from your hand: {', '.join(map(str, current_player_hand))}")
             
-            ###bot starts here##
+            ###Android starts here##
             ################
             if "player1" in str(current_player):
                 chosen_card_index =self.computer_player(current_player, current_player_hand)
                 
             else:
             #####Manual player starts####
-                chosen_card_index = input("Enter the index of the card you want to play or enter 'P' to pick up: ")
+               chosen_card_index = input("Enter the index of the card you want to play or enter 'P' to pick up: ")
         #drop to pick up card
-            # if chosen_card_index.upper() == 'P':
-            #     self.pick_up(current_player)
-            #     break
+            if chosen_card_index.upper() == 'P':
+                self.pick_up(current_player)
+                break
             
             #convert str to int
             chosen_card_index=int(chosen_card_index)
@@ -334,40 +334,47 @@ class startGame:
     def check_played_card(self, played_card, current_player,current_player_index): 
                    
         if str(played_card) =="wild":
-            while True:
-                #ask user to choose a colour
-                wild_colour= input("Enter your chosen wild card colour? ").lower()
-                if wild_colour in["red", "yellow","green","blue"]:
-                    played_card.colour=wild_colour
-                    self.discard_pile.append(played_card)
-                    print(f"top card on the discard pile is {played_card}")
+            if "player1" in str(current_player):
+                self.android_play_wild(played_card)
+            else:
+                while True:
+                    #ask user to choose a colour
+                    wild_colour= input("Enter your chosen wild card colour? ").lower()
+                    if wild_colour in["red", "yellow","green","blue"]:
+                        played_card.colour=wild_colour
+                        self.discard_pile.append(played_card)
+                        print(f"top card on the discard pile is {played_card}")
 
-                    break
-                else:
-                    print(f"invalid colour chosen, choose again")
-                    
+                        break
+                    else:
+                        print(f"invalid colour chosen, choose again")
+                        
         
         elif str(played_card) =="pick_up_4":
-            while True:
-            #ask user to choose a colour
-                four_colour= input("Enter your chosen pick_up_4 card colour? ").lower()
-                if four_colour in["red", "yellow","green","blue"]:
-                    played_card.colour=four_colour
-                    print(f"top card on the discard pile is {played_card}")
-                    self.counter = 4
-                    if self.reverse==False:
-                        self.current_player_index = (self.current_player_index + 1) % len(self.players)
-                        current_player = self.players[self.current_player_index]
-                        current_player_hand = current_player.hand
+            if "player1" in str(current_player):
+                self.android_play_four(played_card, self.reverse,current_player_index,self.players,current_player)
+            else:
+                while True:
+                #ask user to choose a colour
+                    four_colour= input("Enter your chosen pick_up_4 card colour? ").lower()
+                    if four_colour in["red", "yellow","green","blue"]:
+                        played_card.colour=four_colour
+                        self.discard_pile.append(played_card)
+                        print(f"top card on the discard pile is {played_card}")
+                        self.counter = 4
+                        if self.reverse==False:
+                            self.current_player_index = (self.current_player_index + 1) % len(self.players)
+                            current_player = self.players[self.current_player_index]
+                            current_player_hand = current_player.hand
+                        else:
+                            self.current_player_index = (self.current_player_index - 1) % len(self.players)
+                            current_player = self.players[self.current_player_index]
+                            current_player_hand = current_player.hand
+                        self.pick_up(current_player)
+                        
+                        break
                     else:
-                        self.current_player_index = (self.current_player_index - 1) % len(self.players)
-                        current_player = self.players[self.current_player_index]
-                        current_player_hand = current_player.hand
-                    self.pick_up(current_player)
-                    
-                    break
-                else:
-                    print(f"invalid colour chosen, choose again")
+                        print(f"invalid colour chosen, choose again")
         
         elif "pick_up_2" in str(played_card):
             self.counter +=2
@@ -400,23 +407,59 @@ class startGame:
 
     #####COMPUTER PLAYER#########
     def computer_player(self, current_player, current_player_hand):
-          playable_cards =[]
-          discarded_card_in_play = self.discard_pile[-1]  
-          for index, card in enumerate(current_player_hand):
-            if (str(card) == "wild" or str(card) == "pick_up_4") or \
-                (card.colour == discarded_card_in_play.colour) or \
-                (card.number == discarded_card_in_play.number) or \
-                ("pick_up_2" in str(card) and "pick_up_2" in str(discarded_card_in_play)):
+        playable_cards =[]
+        discarded_card_in_play = self.discard_pile[-1] 
+        for index, card in enumerate(current_player_hand):
+            if (str(card) == "wild" or str(card) == "pick_up_4"):
                 playable_cards.append(index)
-
-          print(f"playable cards are: {', '.join(map(str, playable_cards))}")  
-          chosen_card_index=random.choice(playable_cards)
-          played_card = current_player_hand[chosen_card_index]
-          return chosen_card_index
+            elif discarded_card_in_play.colour == card.colour:
+                playable_cards.append(index)
+            elif discarded_card_in_play.number is None and discarded_card_in_play.colour == card.colour:
+                playable_cards.append(index)
+            elif discarded_card_in_play.number is not None and discarded_card_in_play.number== card.number:
+                playable_cards.append(index)
+                # ("pick_up_2" in str(card) and "pick_up_2" in str(discarded_card_in_play)):
+                # playable_cards.append(index)
+            
+        print(f"playable cards are: {', '.join(map(str, playable_cards))}")
+            
+        if len(playable_cards)>0:
+            chosen_card_index=random.choice(playable_cards)
+            played_card = current_player_hand[chosen_card_index]
+            chosen_card_index=str(chosen_card_index)
+            return chosen_card_index
+        else:
+            self.pick_up(current_player)
 
        
-              
-                
+
+        
+
+    def android_play_wild(self,played_card):
+                #ask user to choose a colour
+                colour_choice=["red", "yellow","green","blue"]
+                wild_colour= random.choice(colour_choice)
+                played_card.colour=wild_colour
+                self.discard_pile.append(played_card)
+                print(f"top card on the discard pile is {played_card}")
+                return played_card
+    
+    def android_play_four(self, played_card, reverse,current_player_index,players,current_player):           
+        colour_choice=["red", "yellow","green","blue"]
+        four_colour = random.choice(colour_choice)
+        played_card.colour=four_colour
+        self.discard_pile.append(played_card)
+        print(f"top card on the discard pile is {played_card}")
+        self.counter = 4
+        if self.reverse==False:
+            self.current_player_index = (self.current_player_index + 1) % len(self.players)
+            current_player = self.players[self.current_player_index]
+            current_player_hand = current_player.hand
+        else:
+            self.current_player_index = (self.current_player_index - 1) % len(self.players)
+            current_player = self.players[self.current_player_index]
+            current_player_hand = current_player.hand
+        self.pick_up(current_player)    
     #####END COMPUTER PLAYER#####
 
 
