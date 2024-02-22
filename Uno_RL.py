@@ -3,7 +3,7 @@ import random
 import numpy as np
 
 
-random.seed(2)
+random.seed(100)
 class Card:
 #######__init__ means instatiating the object as it's created
 
@@ -278,10 +278,10 @@ class startGame:
             current_player = self.players[self.current_player_index]
             current_player_hand = current_player.hand
             playable_2s =[]
-            print(f"{current_player}, it is your turn, you can only play a pick_up_2 or pick up: {', '.join(map(str, current_player_hand))}")
+            print(f"{current_player}, You can only play a pick_up_2 or pick up: {', '.join(map(str, current_player_hand))}")
                 #check for a pick_up-2 to play and play it automatically
             for index, card in enumerate(current_player_hand):
-                if (str(card) == "pick_up_2"):
+                if "pick_up_2" in str(card):
                     playable_2s.append(index)
             print(f"playable cards are: {', '.join(map(str, playable_2s))}")
                     
@@ -289,16 +289,6 @@ class startGame:
                 chosen_card_index=random.choice(playable_2s)
                 played_card = current_player_hand[chosen_card_index]
                     #chosen_card_index=str(chosen_card_index)
-                print(f"{current_player} has played {played_card}")
-            else:
-                #go to pick _up
-                self.pick_up(current_player)
-
-            #played_card = current_player_hand[chosen_card_index]
-            #self.discarded_card_in_play = self.discard_pile[-1]
-
-
-            if "pick_up_2" in str(played_card):
                 self.counter+=2
                 print(self.counter)
                 self.discard_pile.append(played_card)
@@ -310,11 +300,34 @@ class startGame:
                 else:
                         self.current_player_index = (self.current_player_index - 1) % len(self.players)
                 self.pick_up_2(current_player_index,reverse,players, discard_pile,self.counter)
-                break #player has played a valid card
-            else:
-                print("invalid card choose again")
-                self.pick_up_2(current_player_index,reverse,players, discard_pile,self.counter)
+                print(f"{current_player} has played {played_card}")
                 break
+            else:
+                #go to pick _up
+                self.pick_up(current_player)
+                self.play_card(Player)
+                break
+            #played_card = current_player_hand[chosen_card_index]
+            #self.discarded_card_in_play = self.discard_pile[-1]
+
+
+            # if "pick_up_2" in str(played_card):
+            #     self.counter+=2
+            #     print(self.counter)
+            #     self.discard_pile.append(played_card)
+            #     current_player.hand.remove(played_card)  # Remove the card from the player's hand
+            #     #self.current_player_index = (self.current_player_index + 1) % len(self.players)
+            #     print(f"top card on the discard pile is {played_card}")
+            #     if self.reverse==False:
+            #             self.current_player_index = (self.current_player_index + 1) % len(self.players)
+            #     else:
+            #             self.current_player_index = (self.current_player_index - 1) % len(self.players)
+            #     self.pick_up_2(current_player_index,reverse,players, discard_pile,self.counter)
+            #     break #player has played a valid card
+            # else:
+            #     print("invalid card choose again")
+            #     self.pick_up_2(current_player_index,reverse,players, discard_pile,self.counter)
+            #     break
 
 
 ##check all cards###
@@ -409,6 +422,7 @@ class startGame:
             self.current_player_index = (self.current_player_index + 1) % len(self.players)
             current_player = self.players[self.current_player_index]
             current_player_hand = current_player.hand
+        
         else:
             self.current_player_index = (self.current_player_index - 1) % len(self.players)
             current_player = self.players[self.current_player_index]
