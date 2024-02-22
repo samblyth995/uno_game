@@ -3,7 +3,7 @@ import random
 import numpy as np
 
 
-random.seed(3)
+random.seed(2)
 class Card:
 #######__init__ means instatiating the object as it's created
 
@@ -271,31 +271,30 @@ class startGame:
 ##concurent pick up 2
     def pick_up_2(self,current_player_index,reverse,players, discard_pile,counter):
         #self.current_player_index+1
-        print(f"the current player is {self.current_player_index+1}")
+        #print(f"the current player is {self.current_player_index+1}")
         #print(f"direction is {self.reverse}")
         
         while True:  
             current_player = self.players[self.current_player_index]
             current_player_hand = current_player.hand
-
-            print(f"{current_player}, it is your turn, you can only play a pick_up_2 or P: {', '.join(map(str, current_player_hand))}")
-                
-                
-            chosen_card_index = input("Enter the index of the card you want to play or enter 'P' to pick up: ")
-            #drop to pick up card
-            if chosen_card_index.upper() == 'P':
+            playable_2s =[]
+            print(f"{current_player}, it is your turn, you can only play a pick_up_2 or pick up: {', '.join(map(str, current_player_hand))}")
+                #check for a pick_up-2 to play and play it automatically
+            for index, card in enumerate(current_player_hand):
+                if (str(card) == "pick_up_2"):
+                    playable_2s.append(index)
+            print(f"playable cards are: {', '.join(map(str, playable_2s))}")
+                    
+            if len(playable_2s)>0:
+                chosen_card_index=random.choice(playable_2s)
+                played_card = current_player_hand[chosen_card_index]
+                    #chosen_card_index=str(chosen_card_index)
+                print(f"{current_player} has played {played_card}")
+            else:
+                #go to pick _up
                 self.pick_up(current_player)
-                break
-            
-            #convert str to int
-            chosen_card_index=int(chosen_card_index)
-            #check int is in range
-            if chosen_card_index not in range(len(current_player_hand)):
-                    print("you have not chosen a valid card index.")
-                    game1.pick_up_2(self.current_player_index,self.reverse,
-                                    self.players, self.discard_pile,self.counter)
-                    break
-            played_card = current_player_hand[chosen_card_index]
+
+            #played_card = current_player_hand[chosen_card_index]
             #self.discarded_card_in_play = self.discard_pile[-1]
 
 
@@ -323,19 +322,6 @@ class startGame:
                    
         if str(played_card) =="wild":
                 self.android_play_wild(played_card)
-            # else:
-            #     while True:
-            #         #ask user to choose a colour
-            #         wild_colour= input("Enter your chosen wild card colour? ").lower()
-            #         if wild_colour in["red", "yellow","green","blue"]:
-            #             played_card.colour=wild_colour
-            #             self.discard_pile.append(played_card)
-            #             print(f"top card on the discard pile is {played_card}")
-
-            #             break
-            #         else:
-            #             print(f"invalid colour chosen, choose again")
-                        
         
         elif str(played_card) =="pick_up_4":
             
@@ -427,7 +413,8 @@ class startGame:
             self.current_player_index = (self.current_player_index - 1) % len(self.players)
             current_player = self.players[self.current_player_index]
             current_player_hand = current_player.hand
-        self.pick_up(current_player)    
+        self.pick_up(current_player)
+        self.play_card(Player)  
     #####END COMPUTER PLAYER#####
 
 
