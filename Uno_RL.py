@@ -3,7 +3,7 @@ import random
 import numpy as np
 
 
-random.seed(100)
+#random.seed(100)
 class Card:
 #######__init__ means instatiating the object as it's created
 
@@ -83,15 +83,28 @@ class Deck:
         random.shuffle(self.pack)
 
     #######  DRAW CARD #############
-    def draw_card(self):
+    def draw_card(self,game1):
         if not self.is_empty():
             return self.pack.pop()
+            
         else:
             print("The deck is empty.")
+            last_played =game1.discard_pile[-1]
+            scnd_last_played =game1.discard_pile[-1]
+            print(f"{last_played}")
+            game1.discard_pile.pop()
+            game1.discard_pile.pop()
+            initial_pack.pack.extend(game1.discard_pile)
+            game1.discard_pile=[]
+            game1.discard_pile.append(scnd_last_played)
+            game1.discard_pile.append(last_played)
+            print(f"{game1.discard_pile[-1]}")
+            initial_pack.shuffle()
             return None
-
     def is_empty(self):
         return len(self.pack) == 0
+
+    
 #################Load Things#########
 initial_pack =Deck()
 initial_pack.create_deck()
@@ -133,7 +146,7 @@ class startGame:
 
         for _ in range(7):  # Loop for each card to be dealt
             for player in self.players:
-                drawn_card = initial_pack.draw_card()
+                drawn_card = initial_pack.draw_card(game1)
                 if drawn_card:
                     player.hand.append(drawn_card)
 
@@ -145,7 +158,7 @@ class startGame:
     def discard(self):
         
         while True:
-            top_card = initial_pack.draw_card()
+            top_card = initial_pack.draw_card(game1)
             #self.discard_pile.append(str(top_card))
             self.discard_pile.append(top_card)
             print(f"Top card on the discard pile: {top_card}")
@@ -191,8 +204,11 @@ class startGame:
                     self.check_played_card(played_card, current_player,self.current_player_index)
                     #Declare a winner
                     if not current_player.hand:
+                                
                                 print(f"Player {current_player} has won the game by playing their last card!")
-                                return "Game Over"
+                                exit()
+                                break
+                                
                     break  # Exit the loop as the player successfully played a card
                     
                 
@@ -200,13 +216,14 @@ class startGame:
                     print("Can't play that card")
                     game1.play_card(current_player)
                 break
-                    
+        #game over check          
         self.next_player(self.current_player_index,self.reverse)
 ##skip to pick up 2
      
         self.play_card(self.players)
 ##Move to the next player##
     def next_player(self, current_player_index,reverse):
+
         if self.reverse==False:
             self.current_player_index = (self.current_player_index + 1) % len(self.players)
             
@@ -218,14 +235,14 @@ class startGame:
 
         if self.counter>=1:
             for i in range(self.counter):
-                drawn_card = initial_pack.draw_card()
+                drawn_card = initial_pack.draw_card(game1)
                 current_player.hand.append(drawn_card)
                 print(f"{current_player} has picked up {drawn_card}")
             self.counter=0
             self.next_player(self.current_player_index,self.reverse)
                 
         else:
-            played_card = initial_pack.draw_card()
+            played_card = initial_pack.draw_card(game1)
             discarded_card_in_play = self.discard_pile[-1]
             current_player.hand.append(played_card)
             #print(f"{current_player}, check card is in hand {', '.join(map(str, current_player.hand))}")
@@ -430,10 +447,17 @@ class startGame:
         self.pick_up(current_player)
         self.play_card(Player)  
     #####END COMPUTER PLAYER#####
-
+    # def is_empty(self,Deck,empty_deck):
+    #     if empty_deck ==True:
+    #         initial_pack =Deck()
+    #         self.discard_pile = initial_pack
+    #         initial_pack.shuffle()
+        
+           
+        #return len(self.pack) == 0
 
     #self.play_card(self.players)    
-print("Game Over")
+
        
                 
 
