@@ -222,14 +222,35 @@ class startGame:
                 current_player.hand.append(drawn_card)
                 print(f"{current_player} has picked up {drawn_card}")
             self.counter=0
+            self.next_player(self.current_player_index,self.reverse)
                 
         else:
-            drawn_card = initial_pack.draw_card()
-            
+            played_card = initial_pack.draw_card()
             discarded_card_in_play = self.discard_pile[-1]
-            current_player.hand.append(drawn_card)
-            print(f"{current_player} has picked up {drawn_card}")
-            self.next_player(self.current_player_index,self.reverse)
+            current_player.hand.append(played_card)
+            #print(f"{current_player}, check card is in hand {', '.join(map(str, current_player.hand))}")
+            if (str(played_card=="reverse") and played_card.colour ==discarded_card_in_play.colour)or \
+                (str(played_card=="miss_a_turn") and played_card.colour ==discarded_card_in_play.colour) or \
+                (played_card.colour == discarded_card_in_play.colour) or \
+                (played_card.number!=None and played_card.number == discarded_card_in_play.number) or \
+                ("pick_up_2" in str(played_card) and "pick_up_2" in str(discarded_card_in_play))or \
+                (str(played_card) == "wild" or str(played_card) == "pick_up_4"):
+
+                print(f"{current_player} has picked up a playable card {played_card}")
+                self.check_played_card(played_card, current_player,self.current_player_index)
+                
+                #play the card
+                chosen_card_index = len(current_player.hand)-1
+                played_card = current_player.hand[chosen_card_index]
+                current_player.hand.remove(played_card)
+
+                print(f"{current_player} has played {played_card}")
+                self.discard_pile.append(played_card)
+                print(f"the top card on the discard pile is {played_card}")
+            else:
+                print(f"{current_player} has picked up {played_card}")
+                current_player = self.players[self.current_player_index]
+            
 
         
             # if (str(drawn_card) == "wild" or str(drawn_card) == "pick_up_4") or \
@@ -301,20 +322,19 @@ class startGame:
     def check_played_card(self, played_card, current_player,current_player_index): 
                    
         if str(played_card) =="wild":
-            if "player1" in str(current_player):
                 self.android_play_wild(played_card)
-            else:
-                while True:
-                    #ask user to choose a colour
-                    wild_colour= input("Enter your chosen wild card colour? ").lower()
-                    if wild_colour in["red", "yellow","green","blue"]:
-                        played_card.colour=wild_colour
-                        self.discard_pile.append(played_card)
-                        print(f"top card on the discard pile is {played_card}")
+            # else:
+            #     while True:
+            #         #ask user to choose a colour
+            #         wild_colour= input("Enter your chosen wild card colour? ").lower()
+            #         if wild_colour in["red", "yellow","green","blue"]:
+            #             played_card.colour=wild_colour
+            #             self.discard_pile.append(played_card)
+            #             print(f"top card on the discard pile is {played_card}")
 
-                        break
-                    else:
-                        print(f"invalid colour chosen, choose again")
+            #             break
+            #         else:
+            #             print(f"invalid colour chosen, choose again")
                         
         
         elif str(played_card) =="pick_up_4":
@@ -374,7 +394,10 @@ class startGame:
             played_card = current_player_hand[chosen_card_index]
             #chosen_card_index=str(chosen_card_index)
             return chosen_card_index
-
+        else:
+            self.pick_up(current_player)
+            self.next_player(self.current_player_index,self.reverse)
+            self.play_card(Player)
 
        
 
